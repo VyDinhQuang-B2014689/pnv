@@ -217,7 +217,7 @@ function clickDay(key, haveCurrDate, currMonth, currYear) {
     date1.innerHTML = ""
     $(date1).append(`<h3> ${ date }</h3>`);
     const docSnap = await getDoc(doc(db, "diemdanh", date))
-    if(docSnap.data()) {
+    if(docSnap.data() || date === formattedToday) {
 
         $(detail).removeClass("d-none");
         $(document.getElementById("noData")).addClass("d-none")
@@ -248,7 +248,7 @@ function clickDay(key, haveCurrDate, currMonth, currYear) {
             }
         }
     }
-    else {
+    else{
         $(detail).addClass("d-none");
         $(document.getElementById("noData")).removeClass("d-none")
         $(btn1).addClass("d-none");

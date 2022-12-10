@@ -229,22 +229,24 @@ function clickDay(key, haveCurrDate, currMonth, currYear) {
         for(let i = 0; i < 7; i++){
             document.getElementById(members[i].id).innerHTML = ""
         }
-        const data = docSnap.data().checked;
-        for(let i = 0; i < data.length; i++) {
-            const checkedId = document.getElementById(data[i]);
-            $(checkedId).append(`<i class="fa-solid fa-check fa-xl cursor checked"></i>`);
-        }
-
-        for(let i = 0; i < 7; i++) {
-            let flag = false
-            for(let j = 0; j < data.length; j++) {
-                if(members[i].id == data[j]) {
-                    flag = true;
-                    break;
-                }
+        if(docSnap.data()) {
+            const data = docSnap.data().checked;
+            for(let i = 0; i < data.length; i++) {
+                const checkedId = document.getElementById(data[i]);
+                $(checkedId).append(`<i class="fa-solid fa-check fa-xl cursor checked"></i>`);
             }
-            if(!flag) {
-                $(document.getElementById(members[i].id)).append(`<i class="fa-solid fa-x fa-xl cursor xmark"></i>`);
+    
+            for(let i = 0; i < 7; i++) {
+                let flag = false
+                for(let j = 0; j < data.length; j++) {
+                    if(members[i].id == data[j]) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag) {
+                    $(document.getElementById(members[i].id)).append(`<i class="fa-solid fa-x fa-xl cursor xmark"></i>`);
+                }
             }
         }
     }
@@ -298,14 +300,16 @@ function clickDay(key, haveCurrDate, currMonth, currYear) {
     }
 
     const docSnap = await getDoc(doc(db, "diemdanh", formattedToday))
-    const check = docSnap.data().checked
-    for(let i = 0; i < check.length; i++) {
-        let flag = false
-        checked.forEach(data => {
-            if(check[i] === data) 
-                flag = true
-        })
-        if(!flag)   checked.push(check[i]);
+    if(docSnap.data()){
+        const check = docSnap.data().checked
+        for(let i = 0; i < check.length; i++) {
+            let flag = false
+            checked.forEach(data => {
+                if(check[i] === data) 
+                    flag = true
+            })
+            if(!flag)   checked.push(check[i]);
+        }
     }
 
     await setDoc(doc(db, "diemdanh", formattedToday), {
